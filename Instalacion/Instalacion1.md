@@ -1,10 +1,11 @@
 # Instalacion de Recursos
 
-## Debian 12
+> [!NOTE]
+> Distribucion: Debian 12 (Bookworm)
 
-### Python3.10
+## Python3.10
 
-> Voy a usar conda para crear un entorno virtual de python3.10
+> Voy a usar conda para crear un entorno virtual de python3.10, la instalacion de conda esta en el repositorio de SAD
 
 ```bash
 conda create -n sw python=3.10
@@ -22,9 +23,19 @@ conda activate sw
 conda deactivate
 ```
 
-### PyCharm
+## PyCharm
 
 > Voy a usar VSCode, no me gusta PyCharm
+
+> [!CAUTION]
+> Porfavor, no uses VSCode con snap o flatpak, instalalo a traves de apt o dpkg
+
+```bash
+curl -fSsL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /usr/share/keyrings/vscode.gpg >/dev/null
+echo deb [arch=amd64 signed-by=/usr/share/keyrings/vscode.gpg] https://packages.microsoft.com/repos/vscode stable main | sudo tee /etc/apt/sources.list.d/vscode.list
+sudo apt update
+sudo apt install code
+```
 
 ### BurpSuite
 
@@ -36,23 +47,21 @@ sudo chmod +x burpsuite_community_linux_v2023_11_1_5.sh
 ./burpsuite_community_linux_v2023_11_1_5.sh
 ```
 
-### Wireshark
+## Wireshark
 
 ```bash
 sudo apt install wireshark
 ```
 
-### Geckodrive
+## Geckodrive
 
 > En Debian parece que viene instalado por defecto
-
-> Para probarlo
 
 ```bash
 python pruebaGeckodrive.py
 ```
 
-### View Source Chart
+## View Source Chart
 
 > Crear un marcador de favoritos con un nombre y este script como URL
 
