@@ -17,6 +17,12 @@ conda create -n sw python=3.10
 conda activate sw
 ```
 
+> Para instalar "Selenium" en el entorno virtual
+
+```bash
+pip install selenium
+```
+
 > Para desactivar el entorno virtual
 
 ```bash
