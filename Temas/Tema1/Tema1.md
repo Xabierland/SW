@@ -24,6 +24,24 @@ Host: www.ehu.eus
 
 ```
 
+#### Mandar formulario con GET
+
+```http
+GET /processForm?dni=11111111 HTTP/1.1
+Host: gae-sw-2017.appspot.com
+
+```
+
+#### Mandar formulario con POST
+
+```http
+POST /processForm HTTP/1.1
+Host: gae-sw-2017.appspot.com
+Content-Length: 12
+
+dni=11111111
+```
+
 ### Python
 
 #### Obtener el aspx de Chunked
@@ -103,4 +121,36 @@ print(respuesta.text)
 fichero = open("ejemplo2.html", "wb")
 fichero.write(respuesta.content)
 fichero.close()
+```
+
+#### Obtener la letra del DNI con GET
+
+```python
+import requests
+
+numero = input("Ingrese un número: ")
+metodo="GET"
+uri="http://gae-sw-2017.appspot.com/processForm?dni="+numero
+cabecera={"Host": "gae-sw-2017.appspot.com", "Content-Lenght": "12"}
+cuerpo=""
+
+respuesta = requests.request(metodo, uri, headers=cabecera, data=cuerpo, allow_redirects=False)
+
+print("DNI: " + respuesta.text)
+```
+
+#### Obtener la letra del DNI con POST
+
+```python
+import requests
+
+metodo="POST"
+uri="http://gae-sw-2017.appspot.com/processForm"
+cabecera={"Host": "gae-sw-2017.appspot.com", "Content-Lenght": "12"}
+numero = input("Ingrese un número: ")
+cuerpo="dni="+numero
+
+respuesta = requests.request(metodo, uri, headers=cabecera, data=cuerpo, allow_redirects=False)
+
+print("DNI: " + respuesta.text)
 ```
