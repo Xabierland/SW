@@ -21,12 +21,27 @@ metodo = "GET"
 uri = respuesta.headers['Location']
 cabeceras = {'Host' : uri.split('/')[2]}
 cuerpo = ""
-respuesta2 = requests.request(metodo, uri, headers=cabeceras, data=cuerpo, allow_redirects=False)
+respuesta = requests.request(metodo, uri, headers=cabeceras, data=cuerpo, allow_redirects=False)
 
-print(respuesta2.status_code)
-print(respuesta2.headers)
+print(respuesta.status_code)
+print(respuesta.headers)
 i=0
-for cabeceras in respuesta2.headers:
+for cabeceras in respuesta.headers:
     i += 1
-    print(i, cabeceras, respuesta2.headers[cabeceras])
-print(respuesta2.text)
+    print(i, cabeceras, respuesta.headers[cabeceras])
+print(respuesta.text)
+
+print("===TERCERA RESPUESTA===")
+metodo = "GET"
+uri = respuesta.headers['Location']
+cabeceras = {'Host' : uri.split('/')[2]}
+cuerpo = ""
+respuesta = requests.request(metodo, uri, headers=cabeceras, data=cuerpo, allow_redirects=False)
+
+print(respuesta.status_code)
+print(respuesta.headers)
+i=0
+for cabeceras in respuesta.headers:
+    i += 1
+    print(i, cabeceras, respuesta.headers[cabeceras])
+print(respuesta.text)
