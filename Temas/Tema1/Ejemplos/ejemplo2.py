@@ -45,3 +45,7 @@ for cabeceras in respuesta.headers:
     i += 1
     print(i, cabeceras, respuesta.headers[cabeceras])
 print(respuesta.text)
+
+fichero = open("ejemplo2.html", "wb")
+fichero.write(respuesta.content)
+fichero.close()

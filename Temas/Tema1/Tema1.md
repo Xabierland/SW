@@ -53,4 +53,3 @@ fichero.close()
 
 ```python
 import requests
-
