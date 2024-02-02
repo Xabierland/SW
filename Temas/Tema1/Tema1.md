@@ -67,7 +67,7 @@ fichero.write(response.content)
 fichero.close()
 ```
 
-#### Redireccion automatica
+#### Seguir redirecciones manualmente
 
 ```python
 import requests
