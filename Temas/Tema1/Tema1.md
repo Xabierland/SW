@@ -1,12 +1,18 @@
-# Tema 1
+# 1. Tema 1
 
-## Teoria
+- [1. Tema 1](#1-tema-1)
+  - [1.1. Teoria](#11-teoria)
+  - [1.2. Ejercicios](#12-ejercicios)
+    - [1.2.1. Burpsuite Repeater](#121-burpsuite-repeater)
+    - [1.2.2. Python](#122-python)
 
-## Ejemplos
+## 1.1. Teoria
 
-### Burpsuite Repeater
+## 1.2. Ejercicios
 
-#### Obtener el directorio raíz de un servidor web
+### 1.2.1. Burpsuite Repeater
+
+#### Obtener el directorio raíz de un servidor web <!-- omit from toc -->
 
 ```http
 GET / HTTP/1.1
@@ -15,7 +21,7 @@ Host: www.ehu.eus
 
 ```
 
-#### Obtener el svg de twitter
+#### Obtener el svg de twitter <!-- omit from toc -->
 
 ```http
 GET /o/upv-ehu-campusa-theme/images/custom/campusa/ic-twitter.svg HTTP/1.1
@@ -24,7 +30,7 @@ Host: www.ehu.eus
 
 ```
 
-#### Mandar formulario con GET
+#### Mandar formulario con GET <!-- omit from toc -->
 
 ```http
 GET /processForm?dni=11111111 HTTP/1.1
@@ -32,7 +38,7 @@ Host: gae-sw-2017.appspot.com
 
 ```
 
-#### Mandar formulario con POST
+#### Mandar formulario con POST <!-- omit from toc -->
 
 ```http
 POST /processForm HTTP/1.1
@@ -42,9 +48,43 @@ Content-Length: 12
 dni=11111111
 ```
 
-### Python
+#### Login en egela <!-- omit from toc -->
 
-#### Obtener el aspx de Chunked
+```http
+GET /login/index.php HTTP/1.1
+host: egela.ehu.eus
+
+
+```
+
+```http
+POST /login/index.php HTTP/1.1
+Host: egela.ehu.eus
+Content-Type: application/x-www-form-urlencoded
+Cookie: MoodleSessionegela=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+username=alumno&password=alumno&logintoken=XXXXXXXX
+```
+
+```http
+GET /login/index.php?testsession=XXXXX HTTP/1.1
+host: egela.ehu.eus
+cookie: MoodleSessionegela=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+```
+
+```http
+GET / HTTP/1.1
+host: egela.ehu.eus
+cookie: MoodleSessionegela=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+```
+
+### 1.2.2. Python
+
+#### Obtener el aspx de Chunked <!-- omit from toc -->
 
 ```python
 import requests
@@ -67,7 +107,7 @@ fichero.write(response.content)
 fichero.close()
 ```
 
-#### Seguir redirecciones manualmente
+#### Seguir redirecciones manualmente <!-- omit from toc -->
 
 ```python
 import requests
@@ -123,7 +163,7 @@ fichero.write(respuesta.content)
 fichero.close()
 ```
 
-#### Obtener la letra del DNI con GET
+#### Obtener la letra del DNI con GET <!-- omit from toc -->
 
 ```python
 import requests
@@ -139,7 +179,7 @@ respuesta = requests.request(metodo, uri, headers=cabecera, data=cuerpo, allow_r
 print("DNI: " + respuesta.text)
 ```
 
-#### Obtener la letra del DNI con POST
+#### Obtener la letra del DNI con POST <!-- omit from toc -->
 
 ```python
 import requests
