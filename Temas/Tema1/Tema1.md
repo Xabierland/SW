@@ -1,16 +1,47 @@
-# 1. Tema 1
+# 1. Tema 1 - HTTP
 
-- [1. Tema 1](#1-tema-1)
+- [1. Tema 1 - HTTP](#1-tema-1---http)
   - [1.1. Teoria](#11-teoria)
+    - [1.1.1. Introducción](#111-introducción)
+    - [1.1.2. Carga de una página web](#112-carga-de-una-página-web)
+    - [1.1.3. Codigos de estado](#113-codigos-de-estado)
+    - [1.1.4. Formularios](#114-formularios)
+    - [1.1.5. Cookies](#115-cookies)
+    - [1.1.6. Caché](#116-caché)
+    - [1.1.7. Content-Length](#117-content-length)
+    - [1.1.8. Transfer-Encoding](#118-transfer-encoding)
+    - [1.1.9. Codificación](#119-codificación)
+    - [1.1.10. Compresión](#1110-compresión)
   - [1.2. Ejercicios](#12-ejercicios)
-    - [1.2.1. Burpsuite Repeater](#121-burpsuite-repeater)
+    - [1.2.1. Burp Suite](#121-burp-suite)
     - [1.2.2. Python](#122-python)
+    - [1.2.3. Wireshark](#123-wireshark)
 
 ## 1.1. Teoria
 
+### 1.1.1. Introducción
+
+### 1.1.2. Carga de una página web
+
+### 1.1.3. Codigos de estado
+
+### 1.1.4. Formularios
+
+### 1.1.5. Cookies
+
+### 1.1.6. Caché
+
+### 1.1.7. Content-Length
+
+### 1.1.8. Transfer-Encoding
+
+### 1.1.9. Codificación
+
+### 1.1.10. Compresión
+
 ## 1.2. Ejercicios
 
-### 1.2.1. Burpsuite Repeater
+### 1.2.1. Burp Suite
 
 #### Obtener el directorio raíz de un servidor web <!-- omit from toc -->
 
@@ -194,3 +225,5 @@ respuesta = requests.request(metodo, uri, headers=cabecera, data=cuerpo, allow_r
 
 print("DNI: " + respuesta.text)
 ```
+
+### 1.2.3. Wireshark
