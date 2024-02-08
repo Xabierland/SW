@@ -1,6 +1,6 @@
-# 1. Tema 1 - HTTP
+# 1. HTTP
 
-- [1. Tema 1 - HTTP](#1-tema-1---http)
+- [1. HTTP](#1-http)
   - [1.1. Teoria](#11-teoria)
     - [1.1.1. Introducción](#111-introducción)
     - [1.1.2. Carga de una página web](#112-carga-de-una-página-web)
