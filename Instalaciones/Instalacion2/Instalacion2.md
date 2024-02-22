@@ -48,6 +48,7 @@ sudo useradd -m -d /opt/tomcat -U -s /bin/false tomcat
 ```bash
 # Descargamos Tomcat
 wget https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.19/bin/apache-tomcat-10.1.19.tar.gz -O apache-tomcat.tar.gz
+sudo mkdir /opt/tomcat
 sudo tar xzvf apache-tomcat.tar.gz -C /opt/tomcat --strip-components=1 
 ```
 
@@ -59,29 +60,15 @@ sudo chmod -R u+x /opt/tomcat/bin
 
 ```bash
 # Configuramos el usuario admin
-echo "<role rolename="manager-gui" />
-<user username="manager" password="root" roles="manager-gui" />
-
+echo '<tomcat-users xmlns="http://tomcat.apache.org/xml"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://tomcat.apache.org/xml tomcat-users.xsd"
+              version="1.0">
+<role rolename="manager-gui" />
 <role rolename="admin-gui" />
-<user username="admin" password="root" roles="manager-gui,admin-gui" />" | sudo tee -a /opt/tomcat/conf/tomcat-users.xml
-
-echo "...
-<Context antiResourceLocking="false" privileged="true" >
-  <CookieProcessor className="org.apache.tomcat.util.http.Rfc6265CookieProcessor"
-                   sameSiteCookies="strict" />
-<!--  <Valve className="org.apache.catalina.valves.RemoteAddrValve"
-         allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" /> -->
-  <Manager sessionAttributeValueClassNameFilter="java\.lang\.(?:Boolean|Integer|Long|Number|String)|org\.apache\.catalina\.filters\.Csr>
-</Context>" | sudo tee -a /opt/tomcat/webapps/manager/META-INF/context.xml
-
-echo "...
-<Context antiResourceLocking="false" privileged="true" >
-  <CookieProcessor className="org.apache.tomcat.util.http.Rfc6265CookieProcessor"
-                   sameSiteCookies="strict" />
-<!--  <Valve className="org.apache.catalina.valves.RemoteAddrValve"
-         allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" /> -->
-  <Manager sessionAttributeValueClassNameFilter="java\.lang\.(?:Boolean|Integer|Long|Number|String)|org\.apache\.catalina\.filters\.Csr>
-</Context>" | sudo tee -a /opt/tomcat/webapps/host-manager/META-INF/context.xml
+<user username="root" password="root" roles="manager-gui,admin-gui" />
+</tomcat-users>
+' | sudo tee /opt/tomcat/conf/tomcat-users.xml
 ```
 
 ```bash
@@ -110,7 +97,7 @@ RestartSec=10
 Restart=always
 
 [Install]
-WantedBy=multi-user.target" | sudo tee -a /etc/systemd/system/tomcat.service
+WantedBy=multi-user.target" | sudo tee /etc/systemd/system/tomcat.service
 ```
 
 ```bash
