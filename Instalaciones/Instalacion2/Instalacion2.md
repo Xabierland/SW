@@ -43,15 +43,21 @@ sudo apt install mysql-server
 ```bash
 # Añadimos un usuario para Tomcat
 sudo useradd -m -d /opt/tomcat -U -s /bin/false tomcat 
+```
 
+```bash
 # Descargamos Tomcat
 wget https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.19/bin/apache-tomcat-10.1.19.tar.gz -O apache-tomcat.tar.gz
 sudo tar xzvf apache-tomcat.tar.gz -C /opt/tomcat --strip-components=1 
+```
 
+```bash
 # Cambiamos los permisos
 sudo chown -R tomcat:tomcat /opt/tomcat/
 sudo chmod -R u+x /opt/tomcat/bin
+```
 
+```bash
 # Configuramos el usuario admin
 echo "<role rolename="manager-gui" />
 <user username="manager" password="root" roles="manager-gui" />
@@ -76,7 +82,9 @@ echo "...
          allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" /> -->
   <Manager sessionAttributeValueClassNameFilter="java\.lang\.(?:Boolean|Integer|Long|Number|String)|org\.apache\.catalina\.filters\.Csr>
 </Context>" | sudo tee -a /opt/tomcat/webapps/host-manager/META-INF/context.xml
+```
 
+```bash
 # Creamos el daemon
 echo "[Unit]
 Description=Tomcat
@@ -103,7 +111,9 @@ Restart=always
 
 [Install]
 WantedBy=multi-user.target" | sudo tee -a /etc/systemd/system/tomcat.service
+```
 
+```bash
 # Recargamos el daemon
 sudo systemctl daemon-reload
 
