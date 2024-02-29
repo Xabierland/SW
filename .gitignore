@@ -1,6 +1,11 @@
 # Mis exclusiones
 .vscode
-.eclipse-workspace/
+!src/
+Temas/Tema3/Ejercicios/.eclipse-workspace/.metadata
+Temas/Tema3/Ejercicios/.eclipse-workspace/Servers
+Temas/Tema3/Ejercicios/.eclipse-workspace/Tema3/.classpath
+Temas/Tema3/Ejercicios/.eclipse-workspace/Tema3/.project
+Temas/Tema3/Ejercicios/.eclipse-workspace/Tema3/.settings
 xabier_gabina*
 img/
 
