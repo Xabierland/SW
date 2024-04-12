@@ -26,17 +26,12 @@ scope = "https://www.googleapis.com/auth/calendar.readonly" # Lista los calendar
 print("\tCreate authorization credentials")
 # https://developers.google.com/identity/protocols/oauth2/native-app#creatingcred
 # Read the secret.json file
-with open('/path/to/secret.json') as f:
-    secret_data = json.load(f)
-
-# Extract the client_id and client_secret from the secret_data
-client_id = secret_data['client_id']
-client_secret = secret_data['client_secret']
+with open("secret.json") as f:
+    secret = json.load(f)
+    client_id = secret["installed"]["client_id"]
+    client_secret = secret["installed"]["client_secret"]
 print("\tConfigure OAuth consent screen")
 print("\tAdd access scopes and test users")
-
-
-
 
 print("\nStep 2.- Send a request to Google's OAuth 2.0 server")
 # https://developers.google.com/identity/protocols/oauth2/native-app#step-2:-send-a-request-to-googles-oauth-2.0-server
@@ -88,18 +83,6 @@ server_socket.close()
 print("\nStep 5.- Exchange authorization code for refresh and access tokens")
 # https://developers.google.com/identity/protocols/oauth2/native-app#exchange-authorization-code
 
-
-# Google responds to this request by returning a JSON object
-# that contains a short-lived access token and a refresh token.
-
-input("The authentication flow has completed. Close browser window and press enter to continue...")
-
-
-print("\nStep 6.- Calling Google APIs")
-# Calendar API: https://developers.google.com/calendar/v3/reference
-# CalendarList: https://developers.google.com/calendar/v3/reference#CalendarList
-# CalendarList:list: https://developers.google.com/calendar/v3/reference/calendarList/list
-
 token_url = "https://oauth2.googleapis.com/token"
 data = {
     "code": auth_code,
@@ -109,17 +92,32 @@ data = {
     "grant_type": "authorization_code"
 }
 response = requests.post(token_url, data=data)
-access_token = response.json()["access_token"]
+tokens = response.json()
+access_token = tokens["access_token"]
+refresh_token = tokens["refresh_token"]
 
-# Make a request to the Google Calendar API
-calendar_url = "https://www.googleapis.com/calendar/v3/users/me/calendarList"
+print("Access Token:", access_token)
+print("Refresh Token:", refresh_token)
+
+
+input("The authentication flow has completed. Close browser window and press enter to continue...")
+
+
+print("\nStep 6.- Calling Google APIs")
+# Calendar API: https://developers.google.com/calendar/v3/reference
+# CalendarList: https://developers.google.com/calendar/v3/reference#CalendarList
+# CalendarList:list: https://developers.google.com/calendar/v3/reference/calendarList/list
+
+# Make a request to the CalendarList API
+calendar_list_url = "https://www.googleapis.com/calendar/v3/users/me/calendarList"
 headers = {
     "Authorization": f"Bearer {access_token}"
 }
-response = requests.get(calendar_url, headers=headers)
+response = requests.get(calendar_list_url, headers=headers)
 calendar_list = response.json()
 
-# Display the calendar list
+# Display the content of the CalendarList
 print("Calendar List:")
 for calendar in calendar_list["items"]:
     print(calendar["summary"])
+
