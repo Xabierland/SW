@@ -21,7 +21,7 @@ print("\tEnable APIs for your project") # https://developers.google.com/identity
 
 
 print("\tIdentify access scopes") # https://developers.google.com/identity/protocols/oauth2/native-app#identify-access-scopes
-scope = "https://www.googleapis.com/auth/calendar.readonly" # Lista los calendarios de google
+scope = "https://www.googleapis.com/auth/calendar.calendarlist.readonly" # Lista los calendarios de google
 
 print("\tCreate authorization credentials")
 # https://developers.google.com/identity/protocols/oauth2/native-app#creatingcred
