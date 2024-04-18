@@ -21,7 +21,7 @@ print("\tEnable APIs for your project") # https://developers.google.com/identity
 
 
 print("\tIdentify access scopes") # https://developers.google.com/identity/protocols/oauth2/native-app#identify-access-scopes
-scope = "https://www.googleapis.com/auth/calendar.calendarlist.readonly" # Lista los calendarios de google
+scope = "https://www.googleapis.com/auth/calendar" # Lista los calendarios de google
 
 print("\tCreate authorization credentials")
 # https://developers.google.com/identity/protocols/oauth2/native-app#creatingcred
@@ -119,5 +119,35 @@ calendar_list = response.json()
 # Display the content of the CalendarList
 print("Calendar List:")
 for calendar in calendar_list["items"]:
-    print(calendar["summary"])
+    print(calendar["id"]+" - "+calendar["summary"])
+    
+print("\nStep 7.- Get All Events")
+# Get all events from the calendar
+calendar_id = "primary"
+events_url = "https://www.googleapis.com/calendar/v3/calendars/{calendar_id}/events"
+response = requests.get(events_url.format(calendar_id="primary"), headers=headers)
+events = response.json()
+print("Events:")
+try:
+    for event in events["items"]:
+        print(event["summary"])
+except KeyError:
+    pass
 
+print("\nStep 8.- Create an event")
+# Create an event for the calendar
+event = {
+    "summary": "SW Prueba oauth",
+    "location": "UPV/EHU",
+    "description": "SW Prueba oauth",
+    "start": {
+        "dateTime": "2024-04-18T14:00:00",
+        "timeZone": "Europe/Madrid"
+    },
+    "end": {
+        "dateTime": "2024-04-18T15:00:00",
+        "timeZone": "Europe/Madrid"
+    }
+}
+response = requests.post(events_url.format(calendar_id="primary"), headers=headers, json=event)
+print(response.json())
