@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    var id;
+    var read_api_key;
+
+    // Función para leer el archivo data.txt
+    function readFile() {
+        var file = new XMLHttpRequest();
+        file.open("GET", "data.txt", true);
+        file.onreadystatechange = function() {
+            if (file.readyState === 4 && file.status === 200) {
+                var lines = file.responseText.split("\n");
+                id = lines[0].split('=')[1];
+                read_api_key = lines[3].split('=')[1];
+                drawChart(); // Call drawChart after reading the file to ensure id and read_api_key are defined
+            }
+        };
+        file.send();
+    }
+
+    // Función para dibujar el gráfico
+    function drawChart() {
+      if (!id || !read_api_key) {
+        return; // Exit the function if id or read_api_key is undefined
+      }
+
+      var xhttp = new XMLHttpRequest();
+      var uri = "https://api.thingspeak.com/channels/"+id+"/feeds.json?api_key="+read_api_key;
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          var responseData = JSON.parse(xhttp.responseText);
+          var data = new google.visualization.DataTable();
+          data.addColumn('datetime', 'Time');
+          data.addColumn('number', 'CPU (%)');
+          data.addColumn('number', 'RAM (%)');
+
+          responseData.feeds.forEach(function(feed) {
+            var time = new Date(feed.created_at);
+            var cpu = parseFloat(feed.field1);
+            var ram = parseFloat(feed.field2);
+            data.addRow([time, cpu, ram]);
+          });
+
+          var options = {
+            title: 'Computer Performance',
+            legend: { position: 'bottom' },
+            curveType: 'function',
+            colors: ['red', 'blue'],
+            series: { 0: { targetAxisIndex: 0 }, 1: { targetAxisIndex: 1 } },
+            vAxes: { 0: { title: '%CPU' }, 1: { title: '%RAM' } }
+          };
+
+          var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+          chart.draw(data, options);
+        }
+      };
+
+      xhttp.open("GET", uri, true);
+      xhttp.send();
+    }
+
+    // Se actualiza el gráfico cada segundo
+    setInterval(function() 
+    {
+      // Lee el archivo data.txt para obtener el id y la read_api_key
+      readFile();
+
+      // Carga la librería de visualización y llama a la función drawChart
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+    }, 1000);
+  </script>
+</head>
+<body>
+  <div id="chart_div" style="width: 100%; height: 500px;"></div>
+</body>
+</html>
