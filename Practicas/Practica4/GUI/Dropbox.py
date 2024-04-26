@@ -5,7 +5,7 @@ from socket import AF_INET, socket, SOCK_STREAM
 import json
 import helper
 
-with open('secret.json') as f:
+with open('dropbox_secret.json') as f:
     secrets = json.load(f)
     app_key = secrets['app_key']
     app_secret = secrets['app_secret']
