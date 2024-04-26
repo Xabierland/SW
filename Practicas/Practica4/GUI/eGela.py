@@ -217,7 +217,7 @@ class eGela:
             'Cookie': f'MoodleSessionegela={self._cookie}'
         }
         pdf_object = self._refs[selection]
-        name = pdf_object['pdf_name']
+        name = pdf_object['pdf_name']+".pdf"
         pdf = pdf_object['pdf_link']
         pdf_response = requests.request('GET', pdf, headers=cabeceras, allow_redirects=False)
         pdf_link = requests.request('GET', pdf_response.headers['Location'], headers=cabeceras, allow_redirects=False)
