@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+import os
 
 def center(win):
     win.update_idletasks()
@@ -22,7 +23,8 @@ def progress(tipo, title):
         popup = tk.Toplevel()
     popup.geometry('250x50')
     popup.title(title)
-    #popup.iconbitmap('./favicon.ico')
+    if os.name == 'nt':
+        popup.iconbitmap('favicon.ico')
     center(popup)
     label = tk.Label(popup, text=title)
     label.grid(row=0, column=0)
