@@ -6,6 +6,7 @@ import Dropbox
 import helper
 import time
 from urllib.parse import unquote
+import requests
 
 ##########################################################################################################
 
@@ -111,7 +112,6 @@ def create_folder():
     dropbox._root = popup
 
 def share_files():
-
     files = []
     for each in selected_items2:
         if dropbox._path == "/":
@@ -140,6 +140,70 @@ def share_files():
         label.bind("<Button-1>", lambda event, url=link: helper.open_url(url))
         label.config(cursor="hand2", fg="blue", underline=True)
     dropbox._root = popup
+
+def download_files():
+    files = []
+    for each in selected_items2:
+        if dropbox._path == "/":
+            path = "/" + dropbox._files[each]['name']
+            files.append(path)
+        else:
+            path = dropbox._path + "/" + dropbox._files[each]['name']
+            files.append(path)
+    resultado=dropbox.download_file(files)
+    if resultado:
+        popup = tk.Toplevel(newroot)
+        popup.geometry('200x100')
+        popup.title('Dropbox')
+        if os.name == 'nt':
+            popup.iconbitmap('favicon.ico')
+        helper.center(popup)
+        label = tk.Label(popup, text="Files downloaded successfully")
+        label.pack(side=tk.TOP)
+        button = tk.Button(popup, text="Close", command=popup.destroy)
+        button.pack(side=tk.BOTTOM)
+    else:
+        popup = tk.Toplevel(newroot)
+        popup.geometry('200x100')
+        popup.title('Dropbox')
+        if os.name == 'nt':
+            popup.iconbitmap('favicon.ico')
+        helper.center(popup)
+        label = tk.Label(popup, text="Error downloading files")
+        label.pack(side=tk.TOP)
+        button = tk.Button(popup, text="Close", command=popup.destroy)
+        button.pack(side=tk.BOTTOM)
+
+def whoami():
+    info = dropbox.whoami()
+    if info==None:
+        popup = tk.Toplevel(newroot)
+        popup.geometry('200x100')
+        popup.title('Dropbox')
+        if os.name == 'nt':
+            popup.iconbitmap('favicon.ico')
+        helper.center(popup)
+        label = tk.Label(popup, text="Error obtaining user info")
+        label.pack(side=tk.TOP)
+        button = tk.Button(popup, text="Close", command=popup.destroy)
+        button.pack(side=tk.BOTTOM)
+    else:
+        popup = tk.Toplevel(newroot)
+        popup.geometry('200x100')
+        popup.title('Dropbox')
+        if os.name == 'nt':
+            popup.iconbitmap('favicon.ico')
+        helper.center(popup)
+        label = tk.Label(popup, text="User info obtained successfully")
+        label.pack(side=tk.TOP)
+        # El nombre
+        label = tk.Label(popup, text="Name: " + info['name']['display_name'])
+        label.pack(side=tk.TOP)
+        # El email
+        label = tk.Label(popup, text="Email: " + info['email'])
+        label.pack(side=tk.TOP)
+        button = tk.Button(popup, text="Close", command=popup.destroy)
+        button.pack(side=tk.BOTTOM)
 ##########################################################################################################
 
 def check_credentials(event= None):
@@ -227,7 +291,7 @@ root.mainloop()
 newroot = tk.Tk()
 newroot.geometry("850x400")
 if os.name == 'nt':
-    root.iconbitmap('favicon.ico')
+    newroot.iconbitmap('favicon.ico')
 newroot.title("eGela -> Dropbox") #
 helper.center(newroot)
 
@@ -283,8 +347,14 @@ button2 = tk.Button(frame2, borderwidth=4, background="red", text="Delete", widt
 button2.pack(padx=2, pady=2)
 button3 = tk.Button(frame2, borderwidth=4, text="Create folder", width=10, pady=8, command=create_folder)
 button3.pack(padx=2, pady=2)
-button4 = tk.Button(frame2, borderwidth=4, text="Share", width=10, pady=8, command=share_files)
+button4 = tk.Button(frame2, borderwidth=4, text="Share link", width=10, pady=8, command=share_files)
 button4.pack(padx=2, pady=2)
+button5 = tk.Button(frame2, borderwidth=4, text="Open file", width=10, pady=8, command=lambda: helper.open_url("https://www.dropbox.com/preview/Aplicaciones/SW_2024" + dropbox._path + '/' + dropbox._files[selected_items2[0]]['name']))
+button5.pack(padx=2, pady=2)
+button6 = tk.Button(frame2, borderwidth=4, text="Download file", width=10, pady=8, command=download_files)
+button6.pack(padx=2, pady=2)
+button7 = tk.Button(frame2, borderwidth=4, text="Whoami", width=10, pady=8, command=whoami)
+button7.pack(padx=2, pady=2)
 frame2.grid(row=1, column=3,  ipadx=10, ipady=10)
 
 for each in pdfs:

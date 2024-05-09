@@ -4,6 +4,8 @@ import webbrowser
 from socket import AF_INET, socket, SOCK_STREAM
 import json
 import helper
+import os
+import time
 
 # Cargo las credenciales de la aplicacion
 with open('dropbox_secret.json') as f:
@@ -47,6 +49,7 @@ class Dropbox:
                     "<body>The authentication flow has completed. Close this window.</body>" \
                     "</html>"
         client_connection.sendall(http_response.encode(encoding="utf-8"))
+        time.sleep(1)
         client_connection.close()
         server_socket.close()
 
@@ -198,3 +201,40 @@ class Dropbox:
                     print("Error sharing file.")
                     print(response.content)
         return links
+    
+    def download_file(self, files):
+        print("/download_file")
+        uri = 'https://content.dropboxapi.com/2/files/download'
+        for file in files:
+            headers = {
+            'Authorization': f'Bearer {self._access_token}',
+            'Content-Type': 'application/octet-stream',
+            'Dropbox-API-Arg': json.dumps({
+                'path': file
+            })
+        }
+            response = requests.post(uri, headers=headers)
+            if response.status_code == 200:
+                print("File downloaded successfully.")
+                with open(file.split("/")[-1], 'wb') as f:
+                    f.write(response.content)
+            else:
+                print("Error downloading file.")
+                print(response.content)
+                return False
+        return True
+    
+    def whoami(self):
+        print("/whoami")
+        uri = 'https://api.dropboxapi.com/2/users/get_current_account'
+        headers = {
+            'Authorization': f'Bearer {self._access_token}',
+        }
+        response = requests.post(uri, headers=headers)
+        if response.status_code == 200:
+            print("User info obtained successfully.")
+            return json.loads(response.content)
+        else:
+            print("Error obtaining user info.")
+            print(response.content)
+            return None
