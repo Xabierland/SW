@@ -5,6 +5,7 @@ from socket import AF_INET, socket, SOCK_STREAM
 import json
 import helper
 
+# Cargo las credenciales de la aplicacion
 with open('dropbox_secret.json') as f:
     secrets = json.load(f)
     app_key = secrets['app_key']
@@ -15,7 +16,7 @@ redirect_uri = "http://" + server_addr + ":" + str(server_port)
 
 class Dropbox:
     _access_token = ""
-    _path = ""
+    _path = "/"
     _files = []
     _root = None
     _msg_listbox = None
@@ -134,6 +135,9 @@ class Dropbox:
 
     def create_folder(self, path):
         print("/create_folder")
+        print(path)
+        if self._path == "/":
+            self._path = ""
         uri = 'https://api.dropboxapi.com/2/files/create_folder_v2'
         headers = {
             'Authorization': f'Bearer {self._access_token}',
@@ -148,3 +152,49 @@ class Dropbox:
             print("Folder created successfully.")
         else:
             print("Error creating folder.")
+            print(response.content)
+
+    def share_files(self, files):
+        # Obtenemos el link para compartir
+        # https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings
+        print("/share_file")
+        uri = 'https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings'
+        headers = {
+            'Authorization': f'Bearer {self._access_token}',
+            'Content-Type': 'application/json'
+        }
+        links = []
+        for file in files:
+            data = {
+                'path': file,
+                "settings": {
+                    "access": "viewer",
+                    "allow_download": True,
+                    "audience": "public",
+                    "requested_visibility": "public"
+                }
+            }
+            response = requests.post(uri, headers=headers, json=data)
+            if response.status_code == 200:
+                print("File shared successfully.")
+                # Obtenemos el link
+                link = json.loads(response.content)['url']
+                links.append(link)
+            else:
+                print("Already exist.")
+                # Pide el link
+                # https://content.dropboxapi.com/2/sharing/get_shared_link_file
+                data = {
+                    'path': file
+                }
+                response = requests.post(uri, headers=headers, json=data)
+                print(response.status_code)
+                if response.status_code == 409:
+                    print("File shared successfully.")
+                    # Obtenemos el link
+                    link = json.loads(response.content)['error']['shared_link_already_exists']['metadata']['url']
+                    links.append(link)
+                else:
+                    print("Error sharing file.")
+                    print(response.content)
+        return links

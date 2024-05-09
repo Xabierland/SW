@@ -43,7 +43,6 @@ def transfer_files():
             path = "/" + unquote(pdf_name)
             print ("----------------------: "+ pdf_name)
             print("----------------------: " + unquote(pdf_name))
-
         else:
             path = dropbox._path + "/" + pdf_name
         dropbox.transfer_file(path, pdf_file)
@@ -105,13 +104,42 @@ def create_folder():
     label = tk.Label(login_frame, text="Create folder")
     label.pack(side=tk.TOP)
     entry_field = tk.Entry(login_frame, width=35)
-    entry_field.bind("<Return>", name_folder)
+    #entry_field.bind("<Return>", name_folder)
     entry_field.pack(side=tk.TOP)
     send_button = tk.Button(login_frame, text="Send", command=lambda: name_folder(entry_field.get()))
     send_button.pack(side=tk.TOP)
     dropbox._root = popup
 
+def share_files():
 
+    files = []
+    for each in selected_items2:
+        if dropbox._path == "/":
+            path = "/" + dropbox._files[each]['name']
+            files.append(path)
+        else:
+            path = dropbox._path + "/" + dropbox._files[each]['name']
+            files.append(path)
+    links = dropbox.share_files(files)
+
+    popup = tk.Toplevel(newroot)
+    popup.geometry('1200x' + str(50+(len(files) * 25)))
+    popup.title('Dropbox')
+    if os.name == 'nt':
+        popup.iconbitmap('favicon.ico')
+    helper.center(popup)
+    
+    login_frame = tk.Frame(popup, padx=10, pady=10)
+    login_frame.pack(fill=tk.BOTH, expand=True)
+    
+    label = tk.Label(login_frame, text="Share files")
+    label.pack(side=tk.TOP)
+    for link in links:
+        label = tk.Label(login_frame, text=link)
+        label.pack(side=tk.TOP)
+        label.bind("<Button-1>", lambda event, url=link: helper.open_url(url))
+        label.config(cursor="hand2", fg="blue", underline=True)
+    dropbox._root = popup
 ##########################################################################################################
 
 def check_credentials(event= None):
@@ -255,6 +283,8 @@ button2 = tk.Button(frame2, borderwidth=4, background="red", text="Delete", widt
 button2.pack(padx=2, pady=2)
 button3 = tk.Button(frame2, borderwidth=4, text="Create folder", width=10, pady=8, command=create_folder)
 button3.pack(padx=2, pady=2)
+button4 = tk.Button(frame2, borderwidth=4, text="Share", width=10, pady=8, command=share_files)
+button4.pack(padx=2, pady=2)
 frame2.grid(row=1, column=3,  ipadx=10, ipady=10)
 
 for each in pdfs:

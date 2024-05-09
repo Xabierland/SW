@@ -57,3 +57,7 @@ def update_listbox2(msg_listbox, path, edukia_json):
                             'name': each['name'],
                             '.tag': each['.tag']})
     return files
+
+def open_url(url):
+    import webbrowser
+    webbrowser.open(url)
