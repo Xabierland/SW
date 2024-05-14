@@ -6,17 +6,25 @@
 
 - [1. HTTP](#1-http)
   - [1.1. Teoria](#11-teoria)
+    - [1.1.1 Introducción](#111-introducción)
+    - [1.1.2 Funcionamiento HTTP](#112-funcionamiento-http)
+    - [1.1.3. Sintaxis Petición HTTP](#113-sintaxis-petición-http)
+    - [1.1.4. Sintaxis Respuesta HTTP](#114-sintaxis-respuesta-http)
   - [1.2. Ejercicios](#12-ejercicios)
     - [1.2.1. Burp Suite](#121-burp-suite)
     - [1.2.2. Python](#122-python)
 - [2. Web Scraping](#2-web-scraping)
+- [3. Servidor Web](#3-servidor-web)
+- [4. OAuth](#4-oauth)
 
 # 1. HTTP
 
 ## 1.1. Teoria
 
+### 1.1.1 Introducción
+
 La web se basa en el intercambio de información.
-Hay diferentes formas de intercambiar información pero la que nos atañe es HTTP.
+Hay diferentes formas de intercambiar información pero la que nos ataña es HTTP.
 
 HTTP es un protocolo de la capa de aplicación que busca obtener información en forma de hipertexto (recursos de la web) para mostrarlos en la aplicación que lo integra (navegadores normalmente).
 
@@ -24,11 +32,12 @@ HTTP sigue el modelo petición-respuesta. Un cliente hace una petición a un ser
 La petición mas común coje dos parametros, el metodo y la URI.
 
 - Metodos:
-  - Los metodos más comunes son:
+  - Los metodos CRUD son:
     - GET: Para obtener información
     - POST: Para enviar información
     - PUT: Para modificar información
     - DELETE: Para borrar información
+  - Existen más metodos.
 - URI:
   - Ahora para explicar que es la URI tenemos que explicar primero que es la URL y URN.
     - La URL (Uniform Resource Locator) indica la ubicación de un recurso en la web y el protocolo que se va a usar para acceder a el.
@@ -46,6 +55,7 @@ La petición mas común coje dos parametros, el metodo y la URI.
         - `path`: La ruta del recurso.
         - `query`: Los parametros de la petición.
         - `fragment`: La parte del recurso que se va a mostrar.
+      - La URI tiene formado US-ASCII y se codifica en UTF-8 esto hace que caracteres especiales tengan que se codificados en hexadecimal.
 
 HTTP ha pasado por varias versiones cuyas especificaciones se guardan en los memorandos de la IETF (Internet Engineering Task Force) llamados RFC (Request For Comments).
 
@@ -55,7 +65,9 @@ HTTP ha pasado por varias versiones cuyas especificaciones se guardan en los mem
 - HTTP/2: La cuarta versión de HTTP que permitía multiplexación de conexiones y compresión de cabeceras.
 - HTTP/3: La quinta versión de HTTP que permitía conexiones seguras y multiplexación de conexiones.
 
-Ahora voy a explicar el funcionamiento de una petición HTTP con un ejemplo en profundidad.
+### 1.1.2 Funcionamiento HTTP
+
+Ahora voy a explicar el funcionamiento de HTTP con un ejemplo en profundidad.
 
 1. El cliente quiere acceder a un recurso de la web.
 2. Introduce la URI en el la aplicación (navegador).
@@ -77,15 +89,138 @@ Ahora voy a explicar el funcionamiento de una petición HTTP con un ejemplo en p
     2. IP (Internet Protocol) es un protocolo de red que se encarga de enrutar los paquetes de datos a través de la red.
 5. Después de establecer la conexión, la aplicación envía la petición HTTP al servidor a través de la conexión TCP/IP.
 6. El servidor recibe la petición y la procesa.
-    1. Si el servidor no puede procesar la petición, devolverá un error.
-    2. Si el servidor puede procesar la petición, devolverá un recurso.
+    1. Comprueba que el recurso existe.
+    2. Comprueba que el cliente tiene permiso para acceder al recurso.
+    3. Analiza las cabeceras de la petición para saber que y como tiene que devolver el recurso.
 7. El servidor crea una respuesta HTTP con el código de estado y el recurso.
 8. La aplicación recibe la respuesta a través de la conexión TCP/IP y la muestra al usuario.
-    1. Si el código de estado es 200, se mostrará el recurso.
-    2. Si el código de estado es 300, se redirigirá a otra URI.
-    3. Si el código de estado es 400, habrá un error en la petición.
-    4. Si el código de estado es 500, habrá un error en el servidor.
+    1. Si el código de estado es 100, se seguirá procesando la petición.
+    2. Si el código de estado es 200, se mostrará el recurso.
+    3. Si el código de estado es 300, se redirigirá a otra URI.
+    4. Si el código de estado es 400, habrá un error en la petición.
+    5. Si el código de estado es 500, habrá un error en el servidor.
 9. El usuario ve el recurso y puede interactuar con él.
+
+#### Código de estado más comunes <!-- omit from toc -->
+
+- 1XX
+  - 100: Continue - Se seguirá procesando la petición.
+  - 101: Switching Protocols - Se cambiará el protocolo.
+  - 102: Processing - Se sigue procesando la petición.
+  - 103: Checkpoint - Se reanuda la petición.
+- 2XX
+  - 200: OK - Todo ha ido bien.
+  - 201: Created - Se ha creado un recurso.
+  - 203: Non-Authoritative Information - Creado pero no se puede acceder a la información.
+  - 204: No Content - No hay contenido.
+  - 205: Reset Content - Se ha reseteado el contenido.
+  - 206: Partial Content - Se ha obtenido parte del contenido.
+  - 207: Multi-Status - Archivo XML con varias respuestas.
+- 3XX
+  - 300: Multiple Choices - Varias opciones para obtener el recurso.
+  - 301: Moved Permanently - Se ha movido el recurso permanentemente.
+  - 302: Moved Temporarily - Se ha movido el recurso temporalmente.
+  - 303: See Other - Se ha movido el recurso pero no se redirige a el.
+  - 304: Not Modified - No se ha modificado el recurso.
+  - 305: Use Proxy - Se tiene que usar un proxy.
+- 4XX
+  - 400: Bad Request - Petición mal formada.
+  - 401: Unauthorized - No autorizado.
+  - 402: Payment Required - Se necesita un pago.
+  - 403: Forbidden - Prohibido.
+  - 404: Not Found - No se ha encontrado el recurso.
+  - 405: Method Not Allowed - Metodo no permitido.
+  - 406: Not Acceptable - No se acepta el contenido.
+  - 407: Proxy Authentication Required - Se necesita autenticación en el proxy.
+  - 408: Request Timeout - Tiempo de espera agotado.
+  - 409: Conflict - Conflicto.
+  - 410: Gone - Recurso eliminado permanentemente (En caso de no ser permanente se usa el 404).
+  - 411: Length Required - Falta la longitud del cuerpo.
+  - 414: URI Too Long - URI demasiado larga.
+  - 423: Locked - Recurso bloqueado.
+  - 429: Too Many Requests - Demasiadas peticiones.
+- 5XX
+  - 500: Internal Server Error - Error interno del servidor.
+  - 501: Not Implemented - Alguna funcion del servidor no esta implementada.
+  - 502: Bad Gateway - Error en la pasarela.
+  - 503: Service Unavailable - Servicio no disponible.
+  - 504: Gateway Timeout - Tiempo de espera agotado en la pasarela.
+  - 505: HTTP Version Not Supported - Versión de HTTP no soportada.
+  - 509: Bandwidth Limit Exceeded - Se ha excedido el ancho de banda.
+  - 510: Not Extended - Extension no soportada.
+  - 511: Network Authentication Required - Se necesita autenticación en la red.
+
+### 1.1.3. Sintaxis Petición HTTP
+
+Sintaxis de una petición HTTP:
+
+- Cabecera
+  - Metodo
+    - Acción que se va a realizar.
+  - URI
+    - Identificador del recurso.
+  - Cabeceras
+    - Campos que se añaden a la petición para dar información adicional.
+    - Formato: `Nombre: Valor`
+    - [Ejemplos](https://developer.mozilla.org/es/docs/Web/HTTP/Headers):
+      - Host - Dominio del servidor.
+      - User-Agent - Identificador del navegador del cliente.
+      - Accept - Tipos de contenido que acepta el cliente.
+      - Accept-Language - Idiomas que acepta el cliente.
+      - Accept-Encoding - Codificaciones que acepta el cliente.
+      - Content-Type - Tipo de contenido que se envía.
+      - Content-Length - Longitud del cuerpo.
+      - Transfer-Encoding - Codificación de transferencia.
+      - Cookie - Información de la sesión.
+      - Referer - URI de la que viene la petición.
+      - Authorization - Información de autenticación.
+      - Cache-Control - Control de la cache.
+- CR LF
+  - Retorno de carro y salto de linea.
+  - Indica el final de la cabecera.
+- Cuerpo
+  - Datos que se envían en la petición.
+
+#### Content-Length vs Transfer-Encoding <!-- omit from toc -->
+
+- Content-Length
+  - Los mensajes se envían una vez procesados.
+  - El troceado depende del MTU (Maximum Transmission Unit).
+- Transfer-Encoding
+  - Los mensajes se envían en trozos.
+  - El troceado depende del servidor y es a nivel de aplicación.
+
+### 1.1.4. Sintaxis Respuesta HTTP
+
+Sintaxis de una respuesta HTTP:
+
+- Cabecera
+  - Versión
+    - Versión de HTTP que se usa.
+  - Status
+    - Status de la respuesta.
+    - Code + Reason
+      - Code: Código de estado.
+      - Reason: Descripcion del código de estado.
+  - Cabeceras
+    - Campos que se añaden a la respuesta para dar información adicional.
+    - Formato: `Nombre: Valor`
+    - [Ejemplos](https://developer.mozilla.org/es/docs/Web/HTTP/Headers):
+      - Server - Servidor que ha respondido.
+      - Date - Fecha de la respuesta.
+      - Last-Modified - Fecha de la última modificación.
+      - ETag - Etiqueta de la entidad.
+      - Content-Type - Tipo de contenido de la respuesta.
+      - Content-Length - Longitud del cuerpo.
+      - Set-Cookie - Información de la sesión.
+      - Location - URI a la que se redirige.
+      - WWW-Authenticate - Información de autenticación.
+      - Cache-Control - Control de la cache.
+- CR LF
+  - Retorno de carro y salto de linea.
+  - Indica el final de la cabecera.
+- Cuerpo
+  - Datos que se envían en la respuesta.
 
 ## 1.2. Ejercicios
 
@@ -275,3 +410,7 @@ print("DNI: " + respuesta.text)
 ```
 
 # 2. Web Scraping
+
+# 3. Servidor Web
+
+# 4. OAuth
