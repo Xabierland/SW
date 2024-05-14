@@ -60,27 +60,32 @@ Ahora voy a explicar el funcionamiento de una petición HTTP con un ejemplo en p
 1. El cliente quiere acceder a un recurso de la web.
 2. Introduce la URI en el la aplicación (navegador).
 3. La aplicación crea una petición HTTP con el metodo GET y la URI.
-   1. La URI se divide en varios campos.
-      1. El campo scheme indicara el protocolo que se va a usar. Por defecto supondremos que es HTTP.
-      2. El campo host indicara el servidor al que se va a acceder.
-         1. Como el host no es una IP que nuestro ordenador pueda entender, se tiene que traducir a una IP.
-         2. Para ello se usa el DNS (Domain Name System) que traduce el host a una IP.
-            1. El DNS puede estar en el router, en el ISP, en un servidor DNS o cacheado en el ordenador.
-      3. El campo port indicara el puerto por el que se va a acceder.
-         1. Si no se especifica el puerto se usara el puerto 80 por defecto.
-      4. El campo path indicara la ruta del recurso.
-      5. El campo query indicara los parametros de la petición.
-      6. El campo fragment indicara la parte del recurso que se va a mostrar.
-4. Después de enviar la petición, el servidor la recibe y la procesa.
-   1. Si el servidor no puede procesar la petición, devolverá un error.
-   2. Si el servidor puede procesar la petición, devolverá un recurso.
-5. El servidor crea una respuesta HTTP con el codigo de estado y el recurso.
-6. La aplicación recibe la respuesta y la muestra al usuario.
-   1. Si el codigo de estado es 200, se mostrara el recurso.
-   2. Si el codigo de estado es 300, se redirigira a otra URI.
-   3. Si el codigo de estado es 400, habra un error en la petición.
-   4. Si el codigo de estado es 500, habra un error en el servidor.
-7. El usuario ve el recurso y puede interactuar con el.
+    1. La URI se divide en varios campos.
+        1. El campo scheme indicara el protocolo que se va a usar.
+           1. Por defecto supondremos que es HTTP.
+        2. El campo host indicara el servidor al que se va a acceder.
+            1. Como el host no es una IP que nuestro ordenador pueda entender, se tiene que traducir a una IP.
+            2. Para ello se usa el DNS (Domain Name System) que traduce el host a una IP.
+                1. El DNS puede estar en el router, en el ISP, en un servidor DNS o cacheado en el ordenador.
+        3. El campo port indicara el puerto por el que se va a acceder.
+            1. Si no se especifica el puerto se usara el puerto 80 por defecto.
+        4. El campo path indicara la ruta del recurso.
+        5. El campo query indicara los parametros de la petición.
+        6. El campo fragment indicara la parte del recurso que se va a mostrar.
+4. La aplicación establece una conexión TCP/IP con el servidor.
+    1. TCP (Transmission Control Protocol) es un protocolo de transporte confiable que garantiza la entrega ordenada y sin errores de los datos.
+    2. IP (Internet Protocol) es un protocolo de red que se encarga de enrutar los paquetes de datos a través de la red.
+5. Después de establecer la conexión, la aplicación envía la petición HTTP al servidor a través de la conexión TCP/IP.
+6. El servidor recibe la petición y la procesa.
+    1. Si el servidor no puede procesar la petición, devolverá un error.
+    2. Si el servidor puede procesar la petición, devolverá un recurso.
+7. El servidor crea una respuesta HTTP con el código de estado y el recurso.
+8. La aplicación recibe la respuesta a través de la conexión TCP/IP y la muestra al usuario.
+    1. Si el código de estado es 200, se mostrará el recurso.
+    2. Si el código de estado es 300, se redirigirá a otra URI.
+    3. Si el código de estado es 400, habrá un error en la petición.
+    4. Si el código de estado es 500, habrá un error en el servidor.
+9. El usuario ve el recurso y puede interactuar con él.
 
 ## 1.2. Ejercicios
 
