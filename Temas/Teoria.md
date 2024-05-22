@@ -15,6 +15,12 @@
     - [1.2.2. Python](#122-python)
 - [2. Web Scraping](#2-web-scraping)
 - [3. Servidor Web](#3-servidor-web)
+  - [3.1. Tomcat](#31-tomcat)
+  - [3.2. Servlets](#32-servlets)
+  - [3.3. JSP](#33-jsp)
+    - [3.3.1. Redirecciones](#331-redirecciones)
+  - [3.4. JS](#34-js)
+    - [3.4.1. AJAX](#341-ajax)
 - [4. OAuth](#4-oauth)
 
 # 1. HTTP
@@ -495,7 +501,41 @@ Una vez obtenido el DOM usamos librerias como BeautifulSoup para obtener la info
 
 # 3. Servidor Web
 
+## 3.1. Tomcat
 
+Tomcat es un servidor web que implementa las tecnologías Java Servlet (javax.servlet) y JavaServer Pages (JSP).
+Tambien se le conoce como contenedor de servlets.
+
+## 3.2. Servlets
+
+Los Servlets son programas Java que se ejecutan en el servidor y generan contenido dinámico.
+Procesan las peticiones y dan una respuesta, especialmente peticiones HTTP.
+
+## 3.3. JSP
+
+Los JSP (JavaServer Pages) son páginas HTML que contienen código Java.
+Se compilan en Servlets y se ejecutan en el servidor.
+Esto provoca que cualquier cambio en el JSP requiera una recompilación del Servlet
+
+### 3.3.1. Redirecciones
+
+Dos formas de redirigir en JSP:
+
+- Servidor - RequestDispatcher
+  - Tiene codigo de estado 200 dado que es una redirección interna del servidor y no se cambia la URI.
+- Navegador - response.sendRedirect
+  - Tiene codigo de estado 302 dado que es una redirección externa del servidor y se cambia la URI.
+
+## 3.4. JS
+
+JavaScript es un lenguaje de programación que se ejecuta en el navegador.
+Se usa para dar interactividad a las páginas web y que el contenido sea dinámico.
+
+### 3.4.1. AJAX
+
+AJAX (Asynchronous JavaScript And XML) es una técnica de programación que permite enviar y recibir información del servidor sin recargar la página.
+Se usa para hacer peticiones asíncronas y actualizar el contenido de la página sin recargarla.
+Por ejemplo se usa el objeto XMLHttpRequest para hacer peticiones asíncronas.
 
 # 4. OAuth
 
