@@ -320,7 +320,7 @@ Authorization: Bearer <access_token>
 
 ![Pregunta 16](.img/1.png)
 
-![Respuesta 16](.img/2.png)
+![Respuesta 16](.img/2.svg)
 
 ## Pregunta 17
 
