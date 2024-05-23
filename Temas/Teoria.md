@@ -214,7 +214,6 @@ Sintaxis de una respuesta HTTP:
       - Date - Fecha de la respuesta.
       - Last-Modified - Fecha de la última modificación.
       - ETag - Etiqueta de la entidad.
-
 - CR LF
   - Retorno de carro y salto de linea.
   - Indica el final de la cabecera.

@@ -22,13 +22,13 @@ La respuesta del servidor será (justifica la respuesta):
 
 ## Pregunta 2
 
-Marca las afirmaciones correctas de las siguientes expresiones:
+De las siguientes afirmaciones, marca las correctas:
 
-- ***a. HTTP es un protocolo sin estado. Para mantener una relación entre las solicitudes, los clientes web definen y envían Cookies al servidor.***
-- b. Una vez que la Cookie está definida en el cliente, cada solicitud que el cliente hace al servidor incluye la información almacenada en la Cookie, y el servidor utiliza esta información para identificar al cliente.
-- ***c. Las Cookies resuelven un problema del protocolo HTTP: es un protocolo sin estado, es decir, no tiene manera de mantener información persistente entre diferentes solicitudes.***
-- d. Las Cookies son un tipo de spyware y pueden leer información personal almacenada en los ordenadores de los usuarios.
-- ***e. Las Cookies son solo datos (no código), por lo tanto, no pueden leer ni eliminar información de los ordenadores de los usuarios.***
+- ***a. HTTP es un protocolo sin estado. Para mantener la relación entre las solicitudes, el cliente web define las cookies y las envía al servidor.***
+- b. Una vez definida la cookie en el cliente, cada solicitud que hace el cliente al servidor envía información almacenada en la cookie, y el servidor utiliza esta información para identificar al cliente.
+- ***c. Las cookies resuelven el problema del protocolo HTTP: es un protocolo de última generación, lo que significa que no tiene forma de mantener información permanente entre diferentes solicitudes..***
+- d. Las cookies son un tipo de software espía que puede leer la información personal almacenada en las computadoras de los usuarios.
+- ***e. Las cookies son solo datos (no código), por lo que no pueden leer ni eliminar información de las computadoras de los usuarios.***
 
 ## Pregunta 3
 
@@ -473,3 +473,123 @@ Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0
 Accept-Language: es-ES,es;q=0.8,en-US;q=0.5,en;q=0.3
 Accept-Encoding: gzip, deflate, br
 ```
+
+## Pregunta 22
+
+Describe detalladamente la estructura de una respuesta HTTP y pon un ejemplo.
+
+- Cabecera
+  - Versión
+    - Versión de HTTP que se usa.
+  - Status
+    - Status de la respuesta.
+    - Code + Reason
+      - Code: Código de estado.
+      - Reason: Descripcion del código de estado.
+  - Cabeceras
+    - Campos que se añaden a la respuesta para dar información adicional.
+    - Formato: `Nombre: Valor`
+    - [Ejemplos](https://developer.mozilla.org/es/docs/Web/HTTP/Headers):
+      - Server - Servidor que ha respondido.
+      - Content-Type - Tipo de contenido de la respuesta.
+      - Content-Length - Longitud del cuerpo.
+      - Set-Cookie - Información de la sesión.
+      - Location - URI a la que se redirige.
+      - Cache-Control - Control de la cache.
+      - Date - Fecha de la respuesta.
+      - Last-Modified - Fecha de la última modificación.
+      - ETag - Etiqueta de la entidad.
+- CR LF
+  - Retorno de carro y salto de linea.
+  - Indica el final de la cabecera.
+- Cuerpo
+  - Datos que se envían en la respuesta.
+
+Ejemplo:
+  
+```http
+HTTP/1.1 200 OK
+Date: Fri, 21 May 2022 08:33:47 GMT
+Server: Apache/2.4.29 (Ubuntu)
+Content-Type: text/html; charset=UTF-8
+Content-Length: 1234
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example</title>
+  </head>
+  <body>
+    <h1>Hello, World!</h1>
+  </body>
+</html>
+```
+
+## Pregunta 23
+
+Un desarrollador desea realizar una petición HTTP para descargar un
+código QR mediante sockets, ya que el microcontrolador sobre el que está
+desarrollando la aplicación no dispone de los recursos necesarios para instalar y
+utilizar una librería HTTP. Para ello, el desarrollador debe rellenar esta plantilla de
+código
+
+Rellena la plantilla de código haciendo uso de mínimo número de cabeceras y
+suponiendo que la URI de la imagen es <http://alias.com/img/codigo_qr.png>
+
+```python
+HOST = "alias.com"
+PORT = "80"
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect((HOST, PORT))
+print("Local socket:", s.getsockname())
+metodo = "GET"
+recurso = "/img/codigo_qr.png"
+primera_linea = metodo + " " + recurso + " HTTP/1.1\r\n"
+cabeceras = { 'Host': HOST }
+cadena_cabeceras =''
+for each in cabeceras:
+cadena_cabeceras = each + ":" + cabeceras[each] + "\r\n"
+cuerpo = ''
+cadena_peticion_http = primera_linea + cadena_cabeceras + "\r\n"
+cadena_peticion_http_bytes = bytes(cadena_peticion_http, 'utf-8')
+print('\n##### HTTP eskaera #####')
+print(cadena_peticion_http_bytes)
+s.sendall(cadena_peticion_http_bytes)
+data = s.recv(1024)
+print('\n##### Respuesta HTTP #####')
+print(data)
+s.close()
+```
+
+## Pregunta 24
+
+A continuación, se muestra un segmento de código en Python que forma parte de un programa más amplio. Este segmento se ha programado para realizar la identificación de usuario en eGela.
+
+```python
+metodo = 'POST'
+uri = "https://egela.ehu.eus/login/index.php"
+cabeceras = {'Host': 'egela.ehu.eus',
+'Cookie': cookiea,
+'Content-Type': 'application/x-www-form-urlencoded',}
+datos = 'username=' + USERNAME + \
+'&password=' + PASSWORD + \
+'&logintoken' + logintoken }
+cabeceras['Content-Length'] = str(len(datos))
+respuesta = requests.request(metodo, uri, headers=cabeceras, \
+data=datos, allow_redirects=False)
+```
+
+Tres usuarios diferentes usan el programa: dos de ellos consiguen identificarse
+correctamente, mientras que el tercero que no lo consigue. Suponiendo que la cookie y
+el token de autenticación se obtienen correctamente en cada intento de inicio de sesión,
+y que todos los usuarios introducen correctamente sus credenciales, ¿a qué se debe el
+error de identificación del tercer usuario? ¿Cómo se puede solucionar?
+
+> Los datos no se han codificado como código URL/URI (también llamado código por ciento). Por tanto, si el tercer usuario tiene algún carácter especial en sus credenciales, éste no se codificará correctamente para su envío por HTTP. Solución: datos_codificados = urllib.parse.urlencode(datos)
+
+## Pregunta 25
+
+En el protocolo OAuth 2.0 para aplicaciones de escritorio, una vez que el usuario se ha identificado correctamente y ha validado los permisos de la aplicación, ¿cómo consigue enviar el servidor de autenticación y autorización una respuesta a la aplicación? ¿Qué se envía en dicha respuesta? Apoya tu respuesta en un diagrama de secuencia que muestre las interacciones HTTP que tienen lugar entre los actores implicados en este paso.
+
+> Mediante una respuesta con código 302 cuya cabecera Location apunta a la redirect_uri de la aplicación. La redirect_uri contiene el auth_code necesario para obtener el access_token en una petición posterior.
+
